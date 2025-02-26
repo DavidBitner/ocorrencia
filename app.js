@@ -330,6 +330,14 @@ async function readImages(files) {
   return Promise.all(imagePromises);
 }
 
+// Clear Fields
+document.getElementById("clear").addEventListener("click", async function () {
+  localStorage.clear();
+  document.querySelectorAll('input, textarea').forEach(input => {
+    input.value = '';
+  });
+})
+
 // Generate Ocorrência
 document.getElementById("generateWord").addEventListener("click", async function () {
   try {
@@ -435,76 +443,76 @@ document.getElementById("generateWord").addEventListener("click", async function
       return;
     }
     if (!victimName) {
-      victimName = "Não houve"
+      victimName = "NÃO HOUVE"
     }
     if (!victimDocumentation) {
-      victimDocumentation = "Não houve"
+      victimDocumentation = "NÃO HOUVE"
     }
     if (!victimSituation) {
-      victimSituation = "Não houve"
+      victimSituation = "NÃO HOUVE"
     }
     if (!victimContact) {
-      victimContact = "Não houve"
+      victimContact = "NÃO HOUVE"
     }
     if (!thirdPartyName) {
-      thirdPartyName = "Não houve"
+      thirdPartyName = "NÃO HOUVE"
     }
     if (!thirdPartyDocumentation) {
-      thirdPartyDocumentation = "Não houve"
+      thirdPartyDocumentation = "NÃO HOUVE"
     }
     if (!thirdPartyContact) {
-      thirdPartyContact = "Não houve"
+      thirdPartyContact = "NÃO HOUVE"
     }
     if (!witnessName) {
-      witnessName = "Não houve"
+      witnessName = "NÃO HOUVE"
     }
     if (!witnessDocumentation) {
-      witnessDocumentation = "Não houve"
+      witnessDocumentation = "NÃO HOUVE"
     }
     if (!witnessContact) {
-      witnessContact = "Não houve"
+      witnessContact = "NÃO HOUVE"
     }
     if (!witnessEmail) {
-      witnessEmail = "Não houve"
+      witnessEmail = "NÃO HOUVE"
     }
     if (!prat) {
-      prat = "Não houve"
+      prat = "NÃO HOUVE"
     }
     if (!pmvt) {
-      pmvt = "Não houve"
+      pmvt = "NÃO HOUVE"
     }
     if (!pmvtr) {
-      pmvtr = "Não houve"
+      pmvtr = "NÃO HOUVE"
     }
     if (!bombeirosSamu) {
-      bombeirosSamu = "Não houve"
+      bombeirosSamu = "NÃO HOUVE"
     }
     if (!sptrans) {
-      sptrans = "Não houve"
+      sptrans = "NÃO HOUVE"
     }
     if (!cet) {
-      cet = "Não houve"
+      cet = "NÃO HOUVE"
     }
     if (!policiaCivil) {
-      policiaCivil = "Não houve"
+      policiaCivil = "NÃO HOUVE"
     }
     if (!gcm) {
-      gcm = "Não houve"
+      gcm = "NÃO HOUVE"
     }
     if (!bo) {
-      bo = "Não houve"
+      bo = "NÃO HOUVE"
     }
     if (!responsavelBo) {
-      responsavelBo = "Não houve"
+      responsavelBo = "NÃO HOUVE"
     }
     if (!pericia) {
-      pericia = "Não houve"
+      pericia = "NÃO HOUVE"
     }
     if (!ocSptrans) {
-      ocSptrans = "Não houve"
+      ocSptrans = "NÃO HOUVE"
     }
     if (!alerta) {
-      alerta = "Não houve"
+      alerta = "NÃO HOUVE"
     }
     if (!cco) {
       alert("Insira o nome do responsável do CCO pela elaboração da ocorrência");
@@ -515,12 +523,12 @@ document.getElementById("generateWord").addEventListener("click", async function
       return;
     }
     if (!operacional) {
-      operacional = "Não houve"
+      operacional = "NÃO HOUVE"
     }
     if (!matriculaOp) {
-      matriculaOp = "Não houve"
+      matriculaOp = "NÃO HOUVE"
     } if (!moto) {
-      moto = "Não houve"
+      moto = "NÃO HOUVE"
     }
 
     // Read the uploaded images
@@ -608,6 +616,7 @@ document.getElementById("generateWord").addEventListener("click", async function
     link.href = URL.createObjectURL(blob);
     link.download = `${nomeOcorrencia}.docx`;
     link.click();
+
   } catch (error) {
     console.error("Error generating document:", error);
     alert("Error generating document: " + error.message);
