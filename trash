@@ -1,0 +1,134 @@
+
+// Function to add more Driver fields and update title
+function addDriver() {
+  const driverContainer = document.getElementById('drivers');
+  const driverEntries = driverContainer.getElementsByClassName('driver-entry');
+  const newDriverEntry = document.createElement('div');
+  newDriverEntry.classList.add('driver-entry');
+
+  const driverCount = driverEntries.length + 1; // Count current drivers to number new driver
+
+  newDriverEntry.innerHTML = `
+<h5>Motorista ${driverCount}</h5> <!-- Dynamic title for driver entry -->
+<label for="driverName">Nome:</label>
+<input type="text" id="driverName" name="driverName[]" required placeholder="Nome do motorista">
+
+<label for="driverCpf">CPF:</label>
+<input type="text" id="driverCpf" name="driverCpf[]" required placeholder="CPF do motorista">
+
+<label for="driverSituation">Situação:</label>
+<input type="text" id="driverSituation" name="driverSituation[]" required placeholder="Situação do motorista">
+
+<button type="button" onclick="removeDriver(this)">Remover Motorista</button>
+`;
+
+  driverContainer.appendChild(newDriverEntry);
+}
+
+// Function to remove Driver fields
+function removeDriver(button) {
+  const driverEntry = button.closest('.driver-entry');
+  driverEntry.remove();
+}
+
+// Function to add more Victim fields and update title
+function addVictim() {
+  const victimContainer = document.getElementById('victims');
+  const victimEntries = victimContainer.getElementsByClassName('victim-entry');
+  const newVictimEntry = document.createElement('div');
+  newVictimEntry.classList.add('victim-entry');
+
+  const victimCount = victimEntries.length + 1; // Count current victims to number new victim
+
+  newVictimEntry.innerHTML = `
+<h5>Vítima ${victimCount}</h5> <!-- Dynamic title for victim entry -->
+<label for="victimName">Nome:</label>
+<input type="text" id="victimName" name="victimName[]" required placeholder="Nome da vítima">
+
+<label for="victimDocumentation">Documentação:</label>
+<input type="text" id="victimDocumentation" name="victimDocumentation[]" required placeholder="Documentação da vítima">
+
+<label for="victimSituation">Situação:</label>
+<input type="text" id="victimSituation" name="victimSituation[]" required placeholder="Situação da vítima">
+
+<label for="victimContact">Contato:</label>
+<input type="text" id="victimContact" name="victimContact[]" required placeholder="Contato da vítima">
+
+<button type="button" onclick="removeVictim(this)">Remover Vítima</button>
+`;
+
+  victimContainer.appendChild(newVictimEntry);
+}
+
+// Function to remove Victim fields
+function removeVictim(button) {
+  const victimEntry = button.closest('.victim-entry');
+  victimEntry.remove();
+}
+
+// Function to add more Third Party fields and update title
+function addThirdParty() {
+  const thirdPartyContainer = document.getElementById('thirdParties');
+  const thirdPartyEntries = thirdPartyContainer.getElementsByClassName('third-party-entry');
+  const newThirdPartyEntry = document.createElement('div');
+  newThirdPartyEntry.classList.add('third-party-entry');
+
+  const thirdPartyCount = thirdPartyEntries.length + 1; // Count current third parties to number new third party
+
+  newThirdPartyEntry.innerHTML = `
+<h5>Terceiro ${thirdPartyCount}</h5> <!-- Dynamic title for third party entry -->
+<label for="thirdPartyName">Nome:</label>
+<input type="text" id="thirdPartyName" name="thirdPartyName[]" required placeholder="Nome do terceiro">
+
+<label for="thirdPartyDocumentation">Documentação:</label>
+<input type="text" id="thirdPartyDocumentation" name="thirdPartyDocumentation[]" required placeholder="Documentação do terceiro">
+
+<label for="thirdPartyContact">Contato:</label>
+<input type="text" id="thirdPartyContact" name="thirdPartyContact[]" required placeholder="Contato do terceiro">
+
+<button type="button" onclick="removeThirdParty(this)">Remover Terceiro</button>
+`;
+
+  thirdPartyContainer.appendChild(newThirdPartyEntry);
+}
+
+// Function to remove Third Party fields
+function removeThirdParty(button) {
+  const thirdPartyEntry = button.closest('.third-party-entry');
+  thirdPartyEntry.remove();
+}
+
+// Function to add more Witness fields and update title
+function addWitness() {
+  const witnessContainer = document.getElementById('witnesses');
+  const witnessEntries = witnessContainer.getElementsByClassName('witness-entry');
+  const newWitnessEntry = document.createElement('div');
+  newWitnessEntry.classList.add('witness-entry');
+
+  const witnessCount = witnessEntries.length + 1; // Count current witnesses to number new witness
+
+  newWitnessEntry.innerHTML = `
+<h5>Testemunha ${witnessCount}</h5> <!-- Dynamic title for witness entry -->
+<label for="witnessName">Nome:</label>
+<input type="text" id="witnessName" name="witnessName[]" required placeholder="Nome da testemunha">
+
+<label for="witnessDocumentation">Documentação:</label>
+<input type="text" id="witnessDocumentation" name="witnessDocumentation[]" required placeholder="Documentação da testemunha">
+
+<label for="witnessContact">Contato:</label>
+<input type="text" id="witnessContact" name="witnessContact[]" required placeholder="Contato da testemunha">
+
+<label for="witnessEmail">Email:</label>
+<input type="email" id="witnessEmail" name="witnessEmail[]" required placeholder="Email da testemunha">
+
+<button type="button" onclick="removeWitness(this)">Remover Testemunha</button>
+`;
+
+  witnessContainer.appendChild(newWitnessEntry);
+}
+
+// Function to remove Witness fields
+function removeWitness(button) {
+  const witnessEntry = button.closest('.witness-entry');
+  witnessEntry.remove();
+}

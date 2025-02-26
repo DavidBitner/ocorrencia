@@ -1,0 +1,43 @@
+nOc			- Numero de ocorrência
+ocorrencia		- Tipo de ocorrência
+coletivo		- Prefixo do coletivo
+linha			- Linha
+date			- Data da ocorrência
+time			- Horário da ocorrência
+logradouro		- Endereço da ocorrência
+numero			- Numero do endereço
+bairro			- Bairro
+inicioFato		- Relato da ocorrência
+desfecho		- Desfecho da ocorrência
+driverName		- Nome do motorista
+driverCpf		- Documento do motorista
+driverSituation		- Situação do motorista
+victimName		- Nome da vitima
+victimDocumentation	- Documento da vitima
+victimSituation		- Situação da vitima
+victimContact		- Contato da vitima
+thirdPartyName		- Nome do terceiro
+thirdPartyDocumentation	- Documentação do terceiro
+thirdPartyContact	- Contato do terceiro
+witnessName		- Nome da testemunha
+witnessDocumentation	- Documentação da vitima
+witnessContact		- Contato da testemunha
+witnessEmail		- Email da testemunha
+prat			- PRAT
+pmvt			- Viatura PM
+pmvtr			- Viatura PMVTR
+bombeirosSamu		- Viatura Bombeiros ou SAMU
+sptrans			- Viatura SPTRANS
+cet			- Viatura CET
+policiaCivil		- Viatura Policia Civil
+gcm			- Viatura GCM
+bo			- Numero do boletim de ocorrência
+responsavelBo		- Nome do responsável pelo boletim de ocorrência
+pericia			- Dados da Pericia
+ocSptrans		- Ocorrência SPTrans
+alerta			- Alerta SIM
+cco			- Nome do responsável pela ocorrência CCO
+matricula		- Matricula do CCO
+operacional		- Nome do operacional
+matriculaOp		- Matricula do operacional
+moto			- Prefixo da moto do operacional
