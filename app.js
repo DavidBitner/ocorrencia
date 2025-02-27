@@ -627,7 +627,7 @@ document.getElementById("generateWord").addEventListener("click", async function
 
     const blob = new Blob([doc.getZip().generate({ type: "arraybuffer" })], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
     const link = document.createElement("a");
-    const nomeOcorrencia = `${nOc} - ${date.replace(/\//g, '-')} - ${linha} - ${coletivo} - ${ocorrencia} - ${logradouro}`
+    const nomeOcorrencia = `${nOc} - ${date.replace(/\//g, '.')} - ${linha} - ${coletivo} - ${ocorrencia} - ${logradouro}`
     link.href = URL.createObjectURL(blob);
     link.download = `${nomeOcorrencia}.docx`;
     link.click();
