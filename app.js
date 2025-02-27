@@ -338,6 +338,21 @@ document.getElementById("clear").addEventListener("click", async function () {
   });
 })
 
+// Modal notes
+const modal = document.getElementById("modal");
+const notesButton = document.getElementById("notes");
+
+notesButton.addEventListener("click", function () {
+  modal.classList.add("show");
+});
+
+modal.addEventListener("click", function (event) {
+  const modalContent = document.querySelector(".modal-content");
+  if (!modalContent.contains(event.target)) {
+    modal.classList.remove("show");
+  }
+});
+
 // Generate Ocorrência
 document.getElementById("generateWord").addEventListener("click", async function () {
   try {
