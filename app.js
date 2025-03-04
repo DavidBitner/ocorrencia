@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Save input fields text
-  const inputs = document.querySelectorAll("input");
+  const inputs = document.querySelectorAll("input, textarea");
 
   inputs.forEach(input => {
     const savedValue = localStorage.getItem(input.id);
@@ -292,6 +292,43 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.setItem(input.id, input.value);
     });
   });
+
+  const fields = {
+    "coletivo": "box-coletivo",
+    "logradouro": "box-logradouro",
+    "driverName": "box-condutor",
+    "driverCpf": "box-cpf"
+  };
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function updateBoxContent() {
+    Object.keys(fields).forEach(inputId => {
+      const input = document.getElementById(inputId);
+      const output = document.getElementById(fields[inputId]);
+
+      if (input && output) {
+        let label = output.id.replace("box-", ""); // Extract label from ID
+        label = capitalizeFirstLetter(label); // Capitalize first letter
+
+        output.textContent = `${label}: ${input.value}`;
+      }
+    });
+  }
+
+  // Run updateBoxContent on input event (typing changes)
+  Object.keys(fields).forEach(inputId => {
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.addEventListener("input", updateBoxContent);
+    }
+  });
+
+  // Run once on page load to sync values
+  updateBoxContent();
+
 });
 
 function clearStorage() {
@@ -336,6 +373,7 @@ document.getElementById("clear").addEventListener("click", async function () {
   document.querySelectorAll('input, textarea').forEach(input => {
     input.value = '';
   });
+  document.querySelector("#excel").classList.add("hidden")
 })
 
 // Modal notes
@@ -360,7 +398,7 @@ document.getElementById("generateWord").addEventListener("click", async function
     const ocorrencia = document.getElementById("ocorrencia").value;
     const coletivo = document.getElementById("coletivo").value;
     const linha = document.getElementById("linha").value;
-    const date = new Date(document.getElementById("date").value).toLocaleDateString("pt-BR");
+    let date = new Date(document.getElementById("date").value).toLocaleDateString("pt-BR");
     const time = document.getElementById("time").value;
     const logradouro = document.getElementById("logradouro").value;
     let numero = document.getElementById("numero").value;
@@ -627,11 +665,29 @@ document.getElementById("generateWord").addEventListener("click", async function
 
     const blob = new Blob([doc.getZip().generate({ type: "arraybuffer" })], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
     const link = document.createElement("a");
-    const nomeOcorrencia = `${nOc} - ${date.replace(/\//g, '.')} - ${linha} - ${coletivo} - ${ocorrencia} - ${logradouro}`
+    const nomeOcorrencia = `${nOc} - ${date.replace(/\//g, '.').slice(0, 5)} - ${linha} - ${coletivo} - ${ocorrencia} - ${logradouro}`
     link.href = URL.createObjectURL(blob);
     link.download = `${nomeOcorrencia}.docx`;
     link.click();
 
+    document.getElementById("td-nOc").textContent = nOc + "/2025";
+    document.getElementById("td-date").textContent = date;
+    document.getElementById("td-alerta").textContent = alerta;
+    document.getElementById("td-victimName").textContent = victimName;
+    document.getElementById("td-driverName").textContent = driverName;
+    document.getElementById("td-driverCpf").textContent = driverCpf;
+    document.getElementById("td-coletivo").textContent = coletivo;
+    document.getElementById("td-linha").textContent = linha;
+    document.getElementById("td-ocorrencia").textContent = ocorrencia;
+    document.getElementById("td-logradouro").textContent = logradouro;
+    document.getElementById("td-operacional").textContent = operacional;
+    document.getElementById("td-bo").textContent = bo;
+    document.getElementById("td-ocSptrans").textContent = ocSptrans;
+    document.getElementById("td-sptrans").textContent = sptrans;
+    document.getElementById("td-time").textContent = time;
+    document.getElementById("td-cco").textContent = cco;
+
+    document.getElementById('excel').classList.remove('hidden');
   } catch (error) {
     console.error("Error generating document:", error);
     alert("Error generating document: " + error.message);
