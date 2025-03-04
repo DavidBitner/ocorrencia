@@ -6,8 +6,13 @@
   --black-color: #000000
 }
 
-body {
+*,
+*::before,
+*::after {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+body {
   background-color: var(--black-color);
   margin: 0;
   padding: 0;
@@ -42,7 +47,7 @@ h5 {
   padding: 40px;
   margin: 40px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgb(255, 255, 255);
   width: 100%;
   max-width: 920px;
 }
@@ -293,4 +298,60 @@ input::placeholder {
   border-bottom: 0;
   font-size: 18px;
   margin-top: 40px;
+}
+
+.table-container {
+  overflow-x: auto;
+  /* Enables horizontal scrolling */
+  width: 100%;
+  /* Ensures the container takes full width */
+}
+
+table {
+  width: auto;
+  /* Allows the table to expand as needed */
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-size: 100%;
+  /* Reset to normal font size */
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+  white-space: nowrap;
+  /* Prevents text from wrapping */
+}
+
+th {
+  background-color: gray;
+  color: white;
+}
+
+td {
+  background-color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+.fixed-box {
+  position: fixed;
+  top: 20px;
+  /* Adjust as needed */
+  right: 20px;
+  /* Adjust as needed */
+  width: 200px;
+  /* Adjust width */
+  padding: 15px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgb(255, 255, 255);
+  text-align: center;
+  font-size: 14px;
+  overflow: hidden;
 }
