@@ -1,3 +1,155 @@
+document.addEventListener("DOMContentLoaded", async function () {
+  const editableDivs = document.querySelectorAll(".editable-div");
+
+  let dictionary = new Set(); // Empty set, will be filled with JSON data
+
+  // Fetch dictionary.json
+  try {
+    const response = await fetch("dictionary.json");
+    const words = await response.json();
+    dictionary = new Set(words);
+    console.log("✅ Dictionary loaded successfully! Word count:", dictionary.size);
+  } catch (error) {
+    console.error("🚨 Error loading dictionary:", error);
+  }
+
+  // Function to highlight misspelled words while preserving cursor position
+  function highlightMisspelledWords(div) {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    const preCaretPosition = getCaretPosition(div, range);
+
+    const words = div.innerText.split(/(\s+)/); // Preserve spaces in split
+    div.innerHTML = words.map(word => 
+      dictionary.has(word.toLowerCase()) || word.trim() === ""
+        ? word
+        : `<span class="misspelled">${word}</span>` 
+    ).join("");
+
+    restoreCaretPosition(div, preCaretPosition);
+  }
+
+  // Get caret position relative to text content
+  function getCaretPosition(element, range) {
+    let preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(element);
+    preCaretRange.setEnd(range.endContainer, range.endOffset);
+    return preCaretRange.toString().length;
+  }
+
+  // Restore caret position after modifying innerHTML
+  function restoreCaretPosition(element, position) {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    let charCount = 0;
+
+    function setPosition(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        let nextCharCount = charCount + node.length;
+        if (charCount <= position && position <= nextCharCount) {
+          range.setStart(node, position - charCount);
+          range.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          return true;
+        }
+        charCount = nextCharCount;
+      } else {
+        for (let child of node.childNodes) {
+          if (setPosition(child)) return true;
+        }
+      }
+      return false;
+    }
+
+    setPosition(element);
+  }
+
+  // Spell Check Logic
+  editableDivs.forEach(div => {
+    div.addEventListener("input", function () {
+      highlightMisspelledWords(this);
+    });
+
+    div.addEventListener("keydown", function (event) {
+      if (event.key === " ") {
+        event.preventDefault();
+        document.execCommand("insertText", false, " "); // Proper space handling
+      }
+    });
+  });
+
+  // Save input fields text
+  const inputs = document.querySelectorAll("input, .editable-div");
+  inputs.forEach(input => {
+    const savedValue = localStorage.getItem(input.id);
+    if (savedValue) {
+      input.innerHTML = savedValue;
+    }
+
+    input.addEventListener("input", () => {
+      localStorage.setItem(input.id, input.innerHTML);
+    });
+  });
+
+  // Your existing logic for updating text box content
+  const fields = {
+    "coletivo": "box-coletivo",
+    "logradouro": "box-logradouro",
+    "driverName": "box-condutor",
+    "driverCpf": "box-cpf"
+  };
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function updateBoxContent() {
+    Object.keys(fields).forEach(inputId => {
+      const input = document.getElementById(inputId);
+      const output = document.getElementById(fields[inputId]);
+
+      if (input && output) {
+        let label = output.id.replace("box-", "");
+        label = capitalizeFirstLetter(label);
+        output.textContent = `${label}: ${input.innerText}`;
+      }
+    });
+  }
+
+  Object.keys(fields).forEach(inputId => {
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.addEventListener("input", updateBoxContent);
+    }
+  });
+
+  updateBoxContent();
+});
+
+// Clear Fields
+document.getElementById("clear").addEventListener("click", function () {
+  localStorage.clear();
+  document.querySelectorAll('input, .editable-div').forEach(input => {
+    input.innerText = '';
+  });
+  document.querySelector("#excel").classList.add("hidden");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Validate Noc
 function validateNoc() {
   const nOc = document.getElementById('nOc');
@@ -154,15 +306,16 @@ function validateBairro() {
 
 // Validate Início do Fato
 function validateInicioFato() {
-  const inicioFato = document.getElementById('inicioFato');
-  if (!inicioFato.value.trim()) {
-    inicioFato.classList.add('invalid');
-    inicioFato.classList.remove('valid');
+  const inicioFato = document.getElementById("inicioFato");
+  if (!inicioFato || !inicioFato.innerText.trim()) {
+    inicioFato.classList.add("invalid");
+    inicioFato.classList.remove("valid");
   } else {
-    inicioFato.classList.remove('invalid');
-    inicioFato.classList.add('valid');
+    inicioFato.classList.remove("invalid");
+    inicioFato.classList.add("valid");
   }
 }
+
 
 // Validate Desfecho
 function validateDesfecho() {
@@ -271,66 +424,6 @@ document.getElementById('desfecho').addEventListener('blur', validateDesfecho);
 document.getElementById('cco').addEventListener('blur', validateCco);
 document.getElementById('matricula').addEventListener('blur', validateMatricula);
 
-// Everything caps
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll("input[type='text'], textarea").forEach(function (element) {
-    element.addEventListener("input", function () {
-      this.value = this.value.toUpperCase();
-    });
-  });
-
-  // Save input fields text
-  const inputs = document.querySelectorAll("input, textarea");
-
-  inputs.forEach(input => {
-    const savedValue = localStorage.getItem(input.id);
-    if (savedValue) {
-      input.value = savedValue;
-    }
-
-    input.addEventListener("input", () => {
-      localStorage.setItem(input.id, input.value);
-    });
-  });
-
-  const fields = {
-    "coletivo": "box-coletivo",
-    "logradouro": "box-logradouro",
-    "driverName": "box-condutor",
-    "driverCpf": "box-cpf"
-  };
-
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  function updateBoxContent() {
-    Object.keys(fields).forEach(inputId => {
-      const input = document.getElementById(inputId);
-      const output = document.getElementById(fields[inputId]);
-
-      if (input && output) {
-        let label = output.id.replace("box-", ""); // Extract label from ID
-        label = capitalizeFirstLetter(label); // Capitalize first letter
-
-        output.textContent = `${label}: ${input.value}`;
-      }
-    });
-  }
-
-  // Run updateBoxContent on input event (typing changes)
-  Object.keys(fields).forEach(inputId => {
-    const input = document.getElementById(inputId);
-    if (input) {
-      input.addEventListener("input", updateBoxContent);
-    }
-  });
-
-  // Run once on page load to sync values
-  updateBoxContent();
-
-});
-
 function clearStorage() {
   localStorage.clear();
   location.reload(); // Reload to reflect cleared values
@@ -374,7 +467,7 @@ document.getElementById("clear").addEventListener("click", async function () {
     input.value = '';
   });
   document.querySelector("#excel").classList.add("hidden")
-})
+});
 
 // Modal notes
 const modal = document.getElementById("modal");
