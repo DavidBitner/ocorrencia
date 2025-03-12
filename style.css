@@ -373,7 +373,7 @@ td {
   pointer-events: none;
 }
 
-.misspelled {
+/* .misspelled {
   font-weight: bold;
   color: rgb(56, 22, 180);
-}
+} */
