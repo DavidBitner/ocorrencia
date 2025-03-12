@@ -51,7 +51,6 @@
       <small id="dateError">Por favor, insira uma data válida</small>
     </section>
 
-
     <!-- Field 6: Hora (using type="time") -->
     <section class="form-section">
       <label for="time">Hora:</label>
@@ -81,24 +80,7 @@
       <small id="bairroError">Por favor, insira um bairro válido</small>
     </section>
 
-    <!-- Description Group -->
-    <h3>Descrição</h3> <!-- Section title for visual separation -->
-    <section class="form-section">
-      <!-- Field 10: Início do Fato -->
-      <label for="inicioFato">Início do Fato:</label>
-      <textarea id="inicioFato" name="inicioFato" rows="6" required placeholder="Descreva o início do fato..."
-        class="full-width"></textarea>
-    </section>
-
-    <!-- Field 11: Desfecho -->
-    <section class="form-section">
-      <label for="desfecho">Desfecho:</label>
-      <textarea id="desfecho" name="desfecho" rows="4" required placeholder="Descreva o desfecho..."
-        class="full-width"></textarea>
-    </section>
-
-    <!-- Specifics Group -->
-    <h3>Informações Específicas</h3>
+    <!-- Driver -->
     <section class="form-section">
       <div class="driver-entry">
         <h5>Motorista</h5> <!-- Dynamic title for driver entry -->
@@ -113,6 +95,23 @@
       </div>
     </section>
 
+    <!-- Description Group -->
+    <h3>Descrição</h3> <!-- Section title for visual separation -->
+    <section class="form-section">
+      <label for="inicioFato">Início do Fato:</label>
+      <div spellcheck="true" id="inicioFato" class="editable-div full-width" contenteditable="true"
+        data-placeholder="Descreva o início do fato..."></div>
+    </section>
+
+    <section class="form-section">
+      <label for="desfecho">Desfecho:</label>
+      <div spellcheck="true" id="desfecho" class="editable-div full-width" contenteditable="true"
+        data-placeholder="Descreva o desfecho..."></div>
+    </section>
+
+
+    <!-- Specifics Group -->
+    <h3>Informações Específicas</h3>
     <section class="form-section">
       <div class="victim-entry">
         <h5>Vítima</h5> <!-- Dynamic title for victim entry -->
