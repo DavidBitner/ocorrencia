@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const preCaretPosition = getCaretPosition(div, range);
 
     const words = div.innerText.split(/(\s+)/); // Preserve spaces in split
-    div.innerHTML = words.map(word => 
+    div.innerHTML = words.map(word =>
       dictionary.has(word.toLowerCase()) || word.trim() === ""
         ? word
-        : `<span class="misspelled">${word}</span>` 
+        : `<span class="misspelled">${word}</span>`
     ).join("");
 
     restoreCaretPosition(div, preCaretPosition);
@@ -79,18 +79,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 
-  // Save input fields text
-  const inputs = document.querySelectorAll("input, .editable-div");
-  inputs.forEach(input => {
-    const savedValue = localStorage.getItem(input.id);
-    if (savedValue) {
-      input.innerHTML = savedValue;
-    }
+    // Save and restore only <input> fields, ignoring .editable-div elements
+    const inputs = document.querySelectorAll("input");
 
-    input.addEventListener("input", () => {
-      localStorage.setItem(input.id, input.innerHTML);
+    inputs.forEach(input => {
+      const savedValue = localStorage.getItem(input.id);
+      if (savedValue) {
+        input.value = savedValue; // Use value for input fields
+      }
+  
+      input.addEventListener("input", () => {
+        localStorage.setItem(input.id, input.value.trim()); // Store only input values
+      });
     });
-  });
+  
 
   // Your existing logic for updating text box content
   const fields = {
@@ -135,12 +137,6 @@ document.getElementById("clear").addEventListener("click", function () {
   });
   document.querySelector("#excel").classList.add("hidden");
 });
-
-
-
-
-
-
 
 
 
@@ -496,8 +492,8 @@ document.getElementById("generateWord").addEventListener("click", async function
     const logradouro = document.getElementById("logradouro").value;
     let numero = document.getElementById("numero").value;
     const bairro = document.getElementById("bairro").value;
-    const inicioFato = document.getElementById("inicioFato").value;
-    const desfecho = document.getElementById("desfecho").value;
+    const inicioFato = document.getElementById("inicioFato").innerText.trim();
+    const desfecho = document.getElementById("desfecho").innerText.trim();
     const driverName = document.getElementById("driverName").value;
     const driverCpf = document.getElementById("driverCpf").value;
     const driverSituation = document.getElementById("driverSituation").value;
