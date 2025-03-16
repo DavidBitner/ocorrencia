@@ -363,6 +363,12 @@ td {
   background: white;
   font-size: 16px;
   outline: none;
+  word-break: normal;
+  /* Ensures words do not break arbitrarily */
+  overflow-wrap: break-word;
+  /* Ensures long words wrap properly */
+  white-space: normal;
+  /* Allows wrapping but prevents forced breaks */
   text-transform: uppercase;
 }
 
