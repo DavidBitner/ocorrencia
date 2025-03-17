@@ -79,20 +79,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 
-    // Save and restore only <input> fields, ignoring .editable-div elements
-    const inputs = document.querySelectorAll("input");
+  // Save and restore only <input> fields, ignoring .editable-div elements
+  const inputs = document.querySelectorAll("input");
 
-    inputs.forEach(input => {
-      const savedValue = localStorage.getItem(input.id);
-      if (savedValue) {
-        input.value = savedValue; // Use value for input fields
-      }
-  
-      input.addEventListener("input", () => {
-        localStorage.setItem(input.id, input.value.trim()); // Store only input values
-      });
+  inputs.forEach(input => {
+    const savedValue = localStorage.getItem(input.id);
+    if (savedValue) {
+      input.value = savedValue; // Use value for input fields
+    }
+
+    input.addEventListener("input", () => {
+      localStorage.setItem(input.id, input.value.trim()); // Store only input values
     });
-  
+  });
 
   // Your existing logic for updating text box content
   const fields = {
@@ -487,7 +486,9 @@ document.getElementById("generateWord").addEventListener("click", async function
     const ocorrencia = document.getElementById("ocorrencia").value;
     const coletivo = document.getElementById("coletivo").value;
     const linha = document.getElementById("linha").value;
-    let date = new Date(document.getElementById("date").value).toLocaleDateString("pt-BR");
+    let dateValue = document.getElementById("date").value;
+    let dateParts = dateValue.split("-");
+    let date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]).toLocaleDateString("pt-BR");
     const time = document.getElementById("time").value;
     const logradouro = document.getElementById("logradouro").value;
     let numero = document.getElementById("numero").value;
