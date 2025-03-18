@@ -33,10 +33,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     "driverCpf": "box-cpf"
   };
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   function updateBoxContent() {
     Object.keys(fields).forEach(inputId => {
       const input = document.getElementById(inputId);
@@ -44,8 +40,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (input && output) {
         let label = output.id.replace("box-", "");
-        label = capitalizeFirstLetter(label);
-        output.textContent = `${label}: ${input.value}`;
+        output.innerHTML = `<span class="label">${label}:</span> ${input.value}`;
       }
     });
   }
