@@ -339,11 +339,8 @@ td {
 .fixed-box {
   position: fixed;
   top: 20px;
-  /* Adjust as needed */
   right: 20px;
-  /* Adjust as needed */
   width: 200px;
-  /* Adjust width */
   padding: 15px;
   background-color: #333;
   color: #fff;
@@ -353,4 +350,9 @@ td {
   font-size: 14px;
   overflow: hidden;
   text-transform: uppercase;
+}
+
+.label {
+  color: var(--primary-color);
+  font-weight: bold;
 }
