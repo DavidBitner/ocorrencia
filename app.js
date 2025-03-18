@@ -1,16 +1,4 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  let dictionary = new Set(); // Empty set, will be filled with JSON data
-
-  // Fetch dictionary.json (No longer used, but keeping structure for potential future use)
-  try {
-    const response = await fetch("dictionary.json");
-    const words = await response.json();
-    dictionary = new Set(words);
-    console.log("✅ Dictionary loaded successfully! Word count:", dictionary.size);
-  } catch (error) {
-    console.error("🚨 Error loading dictionary:", error);
-  }
-
   // Save and restore only <input> and <textarea> fields
   const inputs = document.querySelectorAll("input, textarea");
 
@@ -68,7 +56,7 @@ document.getElementById("clear").addEventListener("click", function () {
 // Validate Noc
 function validateNoc() {
   const nOc = document.getElementById('nOc');
-  nOc.value = nOc.value.toUpperCase(); // Convert to uppercase
+  nOc.value = nOc.value.toUpperCase();
 
   const nOcError = document.getElementById('nOcError');
   const nOcPattern = /^6A\d{4}$/;
@@ -87,7 +75,7 @@ function validateNoc() {
 // Validate Ocorrencia (Free-text)
 function validateOcorrencia() {
   const ocorrencia = document.getElementById('ocorrencia');
-  ocorrencia.value = ocorrencia.value.toUpperCase(); // Convert to uppercase
+  ocorrencia.value = ocorrencia.value.toUpperCase();
 
   const isValid = ocorrencia.value.trim() !== '';
   const ocorrenciaError = document.getElementById("ocorrenciaError");
