@@ -353,33 +353,3 @@ td {
   font-size: 14px;
   overflow: hidden;
 }
-
-.editable-div {
-  min-height: 100px;
-  /* Adjust height as needed */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: white;
-  font-size: 16px;
-  outline: none;
-  word-break: normal;
-  /* Ensures words do not break arbitrarily */
-  overflow-wrap: break-word;
-  /* Ensures long words wrap properly */
-  white-space: normal;
-  /* Allows wrapping but prevents forced breaks */
-  text-transform: uppercase;
-}
-
-.editable-div:empty:before {
-  content: attr(data-placeholder);
-  color: gray;
-  font-style: italic;
-  pointer-events: none;
-}
-
-/* .misspelled {
-  font-weight: bold;
-  color: rgb(56, 22, 180);
-} */
