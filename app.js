@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  const editableDivs = document.querySelectorAll(".editable-div");
-
   let dictionary = new Set(); // Empty set, will be filled with JSON data
 
-  // Fetch dictionary.json
+  // Fetch dictionary.json (No longer used, but keeping structure for potential future use)
   try {
     const response = await fetch("dictionary.json");
     const words = await response.json();
@@ -13,87 +11,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.error("🚨 Error loading dictionary:", error);
   }
 
-  // Function to highlight misspelled words while preserving cursor position
-  function highlightMisspelledWords(div) {
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    const preCaretPosition = getCaretPosition(div, range);
-
-    const words = div.innerText.split(/(\s+)/); // Preserve spaces in split
-    div.innerHTML = words.map(word =>
-      dictionary.has(word.toLowerCase()) || word.trim() === ""
-        ? word
-        : `<span class="misspelled">${word}</span>`
-    ).join("");
-
-    restoreCaretPosition(div, preCaretPosition);
-  }
-
-  // Get caret position relative to text content
-  function getCaretPosition(element, range) {
-    let preCaretRange = range.cloneRange();
-    preCaretRange.selectNodeContents(element);
-    preCaretRange.setEnd(range.endContainer, range.endOffset);
-    return preCaretRange.toString().length;
-  }
-
-  // Restore caret position after modifying innerHTML
-  function restoreCaretPosition(element, position) {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    let charCount = 0;
-
-    function setPosition(node) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        let nextCharCount = charCount + node.length;
-        if (charCount <= position && position <= nextCharCount) {
-          range.setStart(node, position - charCount);
-          range.collapse(true);
-          selection.removeAllRanges();
-          selection.addRange(range);
-          return true;
-        }
-        charCount = nextCharCount;
-      } else {
-        for (let child of node.childNodes) {
-          if (setPosition(child)) return true;
-        }
-      }
-      return false;
-    }
-
-    setPosition(element);
-  }
-
-  // Spell Check Logic
-  editableDivs.forEach(div => {
-    div.addEventListener("input", function () {
-      highlightMisspelledWords(this);
-    });
-
-    div.addEventListener("keydown", function (event) {
-      if (event.key === " ") {
-        event.preventDefault();
-        document.execCommand("insertText", false, " "); // Proper space handling
-      }
-    });
-  });
-
-  // Save and restore only <input> fields, ignoring .editable-div elements
-  const inputs = document.querySelectorAll("input");
+  // Save and restore only <input> and <textarea> fields
+  const inputs = document.querySelectorAll("input, textarea");
 
   inputs.forEach(input => {
     const savedValue = localStorage.getItem(input.id);
     if (savedValue) {
-      input.value = savedValue; // Use value for input fields
+      input.value = savedValue;
     }
 
     input.addEventListener("input", () => {
-      localStorage.setItem(input.id, input.value.trim()); // Store only input values
+      localStorage.setItem(input.id, input.value.trim());
     });
   });
 
-  // Your existing logic for updating text box content
+  // Logic for updating text box content
   const fields = {
     "coletivo": "box-coletivo",
     "logradouro": "box-logradouro",
@@ -113,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (input && output) {
         let label = output.id.replace("box-", "");
         label = capitalizeFirstLetter(label);
-        output.textContent = `${label}: ${input.innerText}`;
+        output.textContent = `${label}: ${input.value}`;
       }
     });
   }
@@ -126,28 +58,23 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   updateBoxContent();
+
 });
 
 // Clear Fields
 document.getElementById("clear").addEventListener("click", function () {
   localStorage.clear();
-  document.querySelectorAll('input, .editable-div').forEach(input => {
-    input.innerText = '';
+  document.querySelectorAll('input, textarea').forEach(input => {
+    input.value = '';
   });
   document.querySelector("#excel").classList.add("hidden");
 });
 
-
-
-
-
-
-
-
-
 // Validate Noc
 function validateNoc() {
   const nOc = document.getElementById('nOc');
+  nOc.value = nOc.value.toUpperCase(); // Convert to uppercase
+
   const nOcError = document.getElementById('nOcError');
   const nOcPattern = /^6A\d{4}$/;
 
@@ -165,14 +92,15 @@ function validateNoc() {
 // Validate Ocorrencia (Free-text)
 function validateOcorrencia() {
   const ocorrencia = document.getElementById('ocorrencia');
+  ocorrencia.value = ocorrencia.value.toUpperCase(); // Convert to uppercase
+
   const isValid = ocorrencia.value.trim() !== '';
-  const ocorrenciaError = document.getElementById("ocorrenciaError")
+  const ocorrenciaError = document.getElementById("ocorrenciaError");
 
   if (!isValid) {
     ocorrencia.classList.add('invalid');
     ocorrencia.classList.remove('valid');
     ocorrenciaError.style.display = 'inline';
-
   } else {
     ocorrencia.classList.remove('invalid');
     ocorrencia.classList.add('valid');
@@ -184,9 +112,9 @@ function validateOcorrencia() {
 function validateColetivo() {
   const coletivo = document.getElementById('coletivo');
   const coletivoError = document.getElementById('coletivoError');
-  const coletivoPattern = /^66\d{3}$/;
+  const coletivoPattern = /^\d{5}( X \d{5})?$/;
 
-  if (!coletivoPattern.test(coletivo.value)) {
+  if (!coletivoPattern.test(coletivo.value.toUpperCase())) {
     coletivo.classList.add('invalid');
     coletivo.classList.remove('valid');
     coletivoError.style.display = 'inline';
@@ -269,7 +197,7 @@ function validateLogradouro() {
 function validateNumero() {
   const numero = document.getElementById('numero');
   const numeroError = document.getElementById('numeroError');
-  const numeroPattern = /^\d+$/;
+  const numeroPattern = /^(\d+|-)$/; // Allows only numbers OR a single hyphen
 
   if (!numeroPattern.test(numero.value)) {
     numero.classList.add('invalid');
@@ -302,7 +230,7 @@ function validateBairro() {
 // Validate Início do Fato
 function validateInicioFato() {
   const inicioFato = document.getElementById("inicioFato");
-  if (!inicioFato || !inicioFato.innerText.trim()) {
+  if (!inicioFato || !inicioFato.value.trim()) {
     inicioFato.classList.add("invalid");
     inicioFato.classList.remove("valid");
   } else {
@@ -310,7 +238,6 @@ function validateInicioFato() {
     inicioFato.classList.add("valid");
   }
 }
-
 
 // Validate Desfecho
 function validateDesfecho() {
@@ -357,53 +284,6 @@ function validateMatricula() {
   }
 }
 
-// Image upload
-document.getElementById('file-upload').addEventListener('change', function (event) {
-  const uploadedFiles = event.target.files;
-  const uploadedImagesContainer = document.getElementById('uploaded-images');
-
-  // Loop through the selected files
-  for (let i = 0; i < uploadedFiles.length; i++) {
-    const file = uploadedFiles[i];
-
-    // Only handle image files
-    if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imageUrl = e.target.result;
-
-        // Create an image thumbnail
-        const imageDiv = document.createElement('div');
-        imageDiv.classList.add('uploaded-image');
-
-        // Create the image element
-        const img = document.createElement('img');
-        img.src = imageUrl;
-
-        // Create a remove button for the image
-        const removeButton = document.createElement('button');
-        removeButton.classList.add('remove-btn');
-        removeButton.innerHTML = 'X';
-        removeButton.addEventListener('click', function () {
-          uploadedImagesContainer.removeChild(imageDiv);
-        });
-
-        // Append the image and the remove button to the div
-        imageDiv.appendChild(img);
-        imageDiv.appendChild(removeButton);
-
-        // Append the div to the container
-        uploadedImagesContainer.appendChild(imageDiv);
-      };
-
-      // Read the file as a data URL (base64 image)
-      reader.readAsDataURL(file);
-    } else {
-      alert('Please upload a valid image file');
-    }
-  }
-});
-
 // Event Listeners for blur events
 document.getElementById('nOc').addEventListener('blur', validateNoc);
 document.getElementById('coletivo').addEventListener('blur', validateColetivo);
@@ -437,24 +317,6 @@ async function loadTemplate() {
   }
 }
 
-// Read images as base64
-async function readImages(files) {
-  const imagePromises = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const reader = new FileReader();
-    const imagePromise = new Promise((resolve) => {
-      reader.onloadend = function () {
-        const imageBase64 = reader.result.split(',')[1]; // Remove the data URL prefix
-        resolve({ index: i + 1, base64: imageBase64 });
-      };
-      reader.readAsDataURL(file); // Read the image as base64
-    });
-    imagePromises.push(imagePromise);
-  }
-  return Promise.all(imagePromises);
-}
-
 // Clear Fields
 document.getElementById("clear").addEventListener("click", async function () {
   localStorage.clear();
@@ -482,52 +344,51 @@ modal.addEventListener("click", function (event) {
 // Generate Ocorrência
 document.getElementById("generateWord").addEventListener("click", async function () {
   try {
-    const nOc = document.getElementById("nOc").value;
-    const ocorrencia = document.getElementById("ocorrencia").value;
-    const coletivo = document.getElementById("coletivo").value;
-    const linha = document.getElementById("linha").value;
+    const nOc = document.getElementById("nOc").value.toUpperCase();
+    const ocorrencia = document.getElementById("ocorrencia").value.toUpperCase();
+    const coletivo = document.getElementById("coletivo").value.toUpperCase();
+    const linha = document.getElementById("linha").value.toUpperCase();
     let dateValue = document.getElementById("date").value;
     let dateParts = dateValue.split("-");
-    let date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]).toLocaleDateString("pt-BR");
-    const time = document.getElementById("time").value;
-    const logradouro = document.getElementById("logradouro").value;
-    let numero = document.getElementById("numero").value;
-    const bairro = document.getElementById("bairro").value;
-    const inicioFato = document.getElementById("inicioFato").innerText.trim();
-    const desfecho = document.getElementById("desfecho").innerText.trim();
-    const driverName = document.getElementById("driverName").value;
-    const driverCpf = document.getElementById("driverCpf").value;
-    const driverSituation = document.getElementById("driverSituation").value;
-    let victimName = document.getElementById("victimName").value;
-    let victimDocumentation = document.getElementById("victimDocumentation").value;
-    let victimSituation = document.getElementById("victimSituation").value;
-    let victimContact = document.getElementById("victimContact").value;
-    let thirdPartyName = document.getElementById("thirdPartyName").value;
-    let thirdPartyDocumentation = document.getElementById("thirdPartyDocumentation").value;
-    let thirdPartyContact = document.getElementById("thirdPartyContact").value;
-    let witnessName = document.getElementById("witnessName").value;
-    let witnessDocumentation = document.getElementById("witnessDocumentation").value;
-    let witnessContact = document.getElementById("witnessContact").value;
-    let witnessEmail = document.getElementById("witnessEmail").value;
-    let prat = document.getElementById("prat").value;
-    let pmvt = document.getElementById("pmvt").value;
-    let pmvtr = document.getElementById("pmvtr").value;
-    let bombeirosSamu = document.getElementById("bombeirosSamu").value;
-    let sptrans = document.getElementById("sptrans").value;
-    let cet = document.getElementById("cet").value;
-    let policiaCivil = document.getElementById("policiaCivil").value;
-    let gcm = document.getElementById("gcm").value;
-    let bo = document.getElementById("bo").value;
-    let responsavelBo = document.getElementById("responsavelBo").value;
-    let pericia = document.getElementById("pericia").value;
-    let ocSptrans = document.getElementById("ocSptrans").value;
-    let alerta = document.getElementById("alerta").value;
-    const cco = document.getElementById("cco").value;
-    const matricula = document.getElementById("matricula").value;
-    let operacional = document.getElementById("operacional").value;
-    let matriculaOp = document.getElementById("matriculaOp").value;
-    let moto = document.getElementById("moto").value;
-    let image1
+    let date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]).toLocaleDateString("pt-BR").toUpperCase();
+    const time = document.getElementById("time").value.toUpperCase();
+    const logradouro = document.getElementById("logradouro").value.toUpperCase();
+    let numero = document.getElementById("numero").value.toUpperCase();
+    const bairro = document.getElementById("bairro").value.toUpperCase();
+    const inicioFato = document.getElementById("inicioFato").value.trim().toUpperCase();
+    const desfecho = document.getElementById("desfecho").value.trim().toUpperCase();
+    const driverName = document.getElementById("driverName").value.toUpperCase();
+    const driverCpf = document.getElementById("driverCpf").value.toUpperCase();
+    const driverSituation = document.getElementById("driverSituation").value.toUpperCase();
+    let victimName = document.getElementById("victimName").value.toUpperCase();
+    let victimDocumentation = document.getElementById("victimDocumentation").value.toUpperCase();
+    let victimSituation = document.getElementById("victimSituation").value.toUpperCase();
+    let victimContact = document.getElementById("victimContact").value.toUpperCase();
+    let thirdPartyName = document.getElementById("thirdPartyName").value.toUpperCase();
+    let thirdPartyDocumentation = document.getElementById("thirdPartyDocumentation").value.toUpperCase();
+    let thirdPartyContact = document.getElementById("thirdPartyContact").value.toUpperCase();
+    let witnessName = document.getElementById("witnessName").value.toUpperCase();
+    let witnessDocumentation = document.getElementById("witnessDocumentation").value.toUpperCase();
+    let witnessContact = document.getElementById("witnessContact").value.toUpperCase();
+    let witnessEmail = document.getElementById("witnessEmail").value.toUpperCase();
+    let prat = document.getElementById("prat").value.toUpperCase();
+    let pmvt = document.getElementById("pmvt").value.toUpperCase();
+    let pmvtr = document.getElementById("pmvtr").value.toUpperCase();
+    let bombeirosSamu = document.getElementById("bombeirosSamu").value.toUpperCase();
+    let sptrans = document.getElementById("sptrans").value.toUpperCase();
+    let cet = document.getElementById("cet").value.toUpperCase();
+    let policiaCivil = document.getElementById("policiaCivil").value.toUpperCase();
+    let gcm = document.getElementById("gcm").value.toUpperCase();
+    let bo = document.getElementById("bo").value.toUpperCase();
+    let responsavelBo = document.getElementById("responsavelBo").value.toUpperCase();
+    let pericia = document.getElementById("pericia").value.toUpperCase();
+    let ocSptrans = document.getElementById("ocSptrans").value.toUpperCase();
+    let alerta = document.getElementById("alerta").value.toUpperCase();
+    const cco = document.getElementById("cco").value.toUpperCase();
+    const matricula = document.getElementById("matricula").value.toUpperCase();
+    let operacional = document.getElementById("operacional").value.toUpperCase();
+    let matriculaOp = document.getElementById("matriculaOp").value.toUpperCase();
+    let moto = document.getElementById("moto").value.toUpperCase();
 
     if (!nOc) {
       alert("Insira um numero de ocorrência. Ex: 6A1234");
@@ -674,35 +535,10 @@ document.getElementById("generateWord").addEventListener("click", async function
       moto = "NÃO HOUVE"
     }
 
-    // Read the uploaded images
-    const imageInput = document.getElementById('file-upload'); // Updated input ID
-    const imageFiles = imageInput.files;
-    const imagesData = await readImages(imageFiles); // Process uploaded images
-
     // Load the template
     const content = await loadTemplate();
     const zip = new PizZip(content);
     const doc = new docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-
-    // Prepare data for the template (including images)
-    const imagesDataObject = {};
-
-    // Add the images to the template data
-    imagesData.forEach((image, idx) => {
-      imagesDataObject[`image${idx + 1}`] = {
-        data: image.base64,
-        extension: 'jpeg' // You can adjust based on the actual image type
-      };
-    });
-
-    // Fill remaining placeholders with blank space
-    const maxImages = 10;
-    for (let i = imagesData.length + 1; i <= maxImages; i++) {
-      imagesDataObject[`image${i}`] = {
-        data: '',  // Blank space for remaining placeholders
-        extension: ''
-      };
-    }
 
     doc.setData(
       {
@@ -748,8 +584,7 @@ document.getElementById("generateWord").addEventListener("click", async function
         matricula: matricula,
         operacional: operacional,
         matriculaOp: matriculaOp,
-        moto: moto,
-        ...imagesDataObject
+        moto: moto
       }); // Replacing {nOc} in the template
     doc.render();
 
