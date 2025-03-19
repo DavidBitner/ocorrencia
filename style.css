@@ -1,6 +1,6 @@
 :root {
   --primary-color: #FBB91A;
-  --primary-color-light: #f3d387;
+  --primary-color-light: #f0c86c;
   --secondary-color: #575757;
   --black-color: #000000
 }
@@ -75,6 +75,11 @@ small {
   box-sizing: border-box;
 }
 
+#copy{
+  transform: scale(0.8);
+  margin-top: 20px;
+}
+
 #specifics button {
   margin-top: 10px;
 }
@@ -84,6 +89,12 @@ small {
   margin-bottom: 30px;
   background-color: #f9f9f9;
   border-radius: 8px;
+}
+
+.disclaimer {
+  font-size: 14px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
 }
 
 .field-group {
