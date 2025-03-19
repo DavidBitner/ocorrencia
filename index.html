@@ -97,6 +97,9 @@
     <!-- Description Group -->
     <h3>Descrição</h3> <!-- Section title for visual separation -->
     <section class="form-section">
+      <p class="disclaimer">Recomendado preencher os próximos dois campos com o CAPSLOCK desligado para que o corretor
+        funcione corretamente. <br>Ambos os campos serão automaticamente convertidos para CAPSLOCK quando o Word for
+        gerado.</p>
       <label for="inicioFato">Início do Fato:</label>
       <textarea id="inicioFato" class="full-width" rows="10" placeholder="Descreva o início do fato..."></textarea>
     </section>
@@ -302,6 +305,13 @@
           </tbody>
         </table>
       </div>
+      <button class="button" id="copy" onclick="clear()">
+        <span class="shadow"></span>
+        <span class="edge"></span>
+        <div class="front">
+          <span>COPIAR LINHA</span>
+        </div>
+      </button>
     </section>
 
     <button class="button" id="generateWord">
