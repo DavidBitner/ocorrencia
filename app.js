@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   updateBoxContent();
-
 });
 
 // Clear Fields
@@ -600,4 +599,19 @@ document.getElementById("generateWord").addEventListener("click", async function
     console.error("Error generating document:", error);
     alert("Error generating document: " + error.message);
   }
+});
+
+document.getElementById("copy").addEventListener("click", function () {
+  let row = document.querySelector("#excel tbody tr"); // Select the first row
+  if (!row) return;
+
+  let text = Array.from(row.querySelectorAll("td"))
+    .map(td => td.innerText)
+    .join("\t"); // Format for Excel
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Linha copiada!");
+  }).catch(err => {
+    console.error("Erro ao copiar:", err);
+  });
 });
