@@ -593,6 +593,7 @@ document.getElementById("generateWord").addEventListener("click", async function
     document.getElementById("td-sptrans").textContent = sptrans;
     document.getElementById("td-time").textContent = time;
     document.getElementById("td-cco").textContent = cco;
+    document.getElementById("td-fechamento").textContent = cco;
 
     document.getElementById('excel').classList.remove('hidden');
   } catch (error) {
